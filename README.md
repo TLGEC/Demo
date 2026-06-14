@@ -1,27 +1,23 @@
-# Solar Survey Pro Demo
+# Solar Survey Pro Demo v2
 
-Static GitHub Pages demo build for Solar Survey Pro.
+Neutral demo version for screen recording, partner demos and controlled customer/process demonstrations.
 
-## Files to upload
+## Upload to GitHub Pages
 
-Upload all files in this folder to the root of a GitHub Pages repository.
+Upload all files in this folder to a GitHub Pages repository root.
 
-Entry point:
+Recommended URL pattern:
 
-- index.html
+`https://<your-github-user>.github.io/<repo-name>/`
 
-## Important note
+## Demo v2 changes
 
-This is a client-side offline-first demo. Any pricing logic or calculation logic inside `app.js` is visible to anyone who can access the page using browser developer tools.
+- Fixed and hardened monday CSV import from the Start page and Tools page.
+- Added support for comma, tab and semicolon separated CSV text.
+- Added better handling for Field,Value exports and normal monday row exports.
+- Added a richer desktop visual design so the demo feels more premium and less flat.
+- Kept the same survey, pricing, proposal, recommendation and export-pack logic as the working app.
 
-For confidential demos, use a private repository or a controlled link and ask viewers to sign the NDA first.
+## Note
 
-## Demo branding
-
-- App name: Solar Survey Pro
-- Demo company: Generic Solar Company
-- Version: Demo v1
-
-## Running locally
-
-Open `index.html` in a browser.
+This is still a browser/static app. Any logic in `app.js` is visible to someone with access to the demo page, so use an NDA and controlled sharing for partner demos.
