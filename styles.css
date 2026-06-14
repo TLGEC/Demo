@@ -1665,7 +1665,16 @@ body.demoV2 .journeyStep.on{
 .tourHero{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:34px;align-items:center;padding:46px;border-radius:36px;color:#fff;background:radial-gradient(circle at 88% 12%,rgba(167,214,33,.38),transparent 22rem),linear-gradient(135deg,#03261a 0%,#07583b 68%,#0b7a46 100%);box-shadow:0 30px 80px rgba(3,38,26,.30);position:relative;overflow:hidden}
 .tourHero:after{content:"";position:absolute;width:430px;height:430px;border:1px solid rgba(255,255,255,.13);border-radius:50%;right:-80px;top:-210px;box-shadow:inset 0 0 0 50px rgba(255,255,255,.035)}
 .tourHeroCopy,.tourHeroActions{position:relative;z-index:1}
-.tourHero .homeVersionSmall{position:static;display:inline-flex;margin-bottom:18px;color:#eafff1;background:rgba(255,255,255,.12)}
+body.demoV3 .tourHero .homeVersionSmall{
+  position:static;
+  inset:auto;
+  display:inline-flex;
+  width:fit-content;
+  margin:0 0 18px;
+  padding:6px 10px;
+  color:#eafff1;
+  background:rgba(255,255,255,.12);
+}
 .tourHero h2{max-width:16ch;margin:8px 0 18px;color:#fff;font-size:clamp(42px,4.25vw,62px);line-height:.98;letter-spacing:-.052em;text-wrap:balance}
 .tourHero p{max-width:760px;margin:0;color:#edf9f0;font-size:20px;line-height:1.45}
 .tourHeroActions{display:grid;gap:12px}

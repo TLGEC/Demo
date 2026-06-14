@@ -8,6 +8,8 @@ Buyer-facing guided demo for screen recording, partner demos and controlled cust
 - Removed full-survey save and calculation work from guided-tour startup.
 - Prevented delayed event rebinding from overriding the stable tour controls.
 - Improved responsive headline wrapping and reset the opening scroll position.
+- Replaced the legacy quote-engine call during navigation with instant illustrative demo outputs.
+- Corrected the version badge collision and aligned all visible version labels.
 - Rotated the offline cache so existing browsers receive the stability update.
 
 ## Demo v3 changes
