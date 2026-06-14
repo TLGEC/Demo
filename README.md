@@ -1,6 +1,13 @@
-# Solar Survey Pro Demo v3.1
+# Solar Survey Pro Demo v3.2
 
 Buyer-facing guided demo for screen recording, partner demos and controlled customer/process demonstrations.
+
+## Demo v3.2 changes
+
+- Replaced the accumulated legacy startup bundle with a compact sales-demo controller.
+- Kept the six-stage tour, editable workflow, proposal, acceptance, local save and presentation mode.
+- Removed the legacy boot sequence that could lock the page before the first interaction.
+- Reduced the active JavaScript payload and offline cache to the files the public demo actually needs.
 
 ## Demo v3.1 changes
 
@@ -38,4 +45,4 @@ Recommended URL pattern:
 
 ## Note
 
-This is still a browser/static app. Any logic in `app.js` is visible to someone with access to the demo page, so use an NDA and controlled sharing for partner demos.
+This is still a browser/static app. Any logic in `demo.js` is visible to someone with access to the demo page, so use controlled sharing for partner demos.

@@ -1,5 +1,5 @@
-const CACHE='solar-survey-pro-demo-v3-3';
-const FILES=['./','./index.html','./styles.css','./app.js','./manifest.json','./icon.svg','./app-icon-192.png','./app-icon-512.png','./tesla-powerwall.webp','./sigenergy-battery.webp','./solar-survey-pro-logo.png'];
+const CACHE='solar-survey-pro-demo-v3-4';
+const FILES=['./','./index.html','./styles.css','./demo.js','./manifest.json','./icon.svg','./app-icon-192.png','./app-icon-512.png','./tesla-powerwall.webp','./sigenergy-battery.webp','./solar-survey-pro-logo.png'];
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => Promise.all(FILES.map(file =>
@@ -22,7 +22,7 @@ self.addEventListener('fetch', event => {
   const shell = url.origin === location.origin && (
     url.pathname.endsWith('/') ||
     url.pathname.endsWith('/index.html') ||
-    url.pathname.endsWith('/app.js') ||
+    url.pathname.endsWith('/demo.js') ||
     url.pathname.endsWith('/styles.css')
   );
   if(shell){
