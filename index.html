@@ -32,47 +32,98 @@
 </div>
 </div>
 <main><section class="panel on landingPage" id="home">
-<div class="landingHero">
-<div class="homeVersionSmall" id="homeVersionSmall">Demo v2</div>
-<div class="heroCopy">
-<div class="heroKicker">Solar Survey Pro</div>
-<h2>Solar consultation</h2>
-<p>A clear local journey for understanding the home, checking the install route, right-sizing the system and agreeing the next step.</p>
-<div class="heroTrustRow">
-<span>Offline first</span><span>Survey-led</span><span>Shared view</span><span>Handover ready</span>
-</div>
-</div>
-<button class="primary heroButton" id="homeNewSurvey" type="button">Start new consultation</button>
-</div>
-<div class="homeCsvStarter" id="homeCsvStarter">
-  <div class="miniStepHead">
-    <span>Optional import</span>
-    <b>Start from monday CSV</b>
+<div class="tourHero">
+  <div class="tourHeroCopy">
+    <div class="homeVersionSmall" id="homeVersionSmall">Demo v3</div>
+    <div class="heroKicker">Guided product tour</div>
+    <h2>From survey to signed recommendation in one guided visit.</h2>
+    <p>See the entire solar consultation come together, from the first customer questions to a proposal, acceptance and handover-ready survey pack.</p>
   </div>
-  <p>Paste the customer row or Field,Value export here before the visit. This keeps the Tools page for backup work and makes the normal start faster.</p>
-  <details class="quickDetails compactCsvImport">
-    <summary>Paste or upload monday CSV</summary>
-    <label>monday CSV text<textarea id="homeCsvPaste" placeholder="Paste Field,Value CSV or a normal monday CSV row here"></textarea></label>
-    <div class="two">
-      <button class="primary" id="homeImportCustomer" type="button">Import CSV and open Priorities</button>
-      <button class="secondary" id="homeSkipCsv" type="button">Start blank survey</button>
-    </div>
-    <label class="fileImportLine">Upload monday CSV<input accept=".csv,text/csv" id="homeCsvFile" type="file"/></label>
-    <div class="guide" id="homeCsvStatus">No CSV imported yet.</div>
-  </details>
+  <div class="tourHeroActions">
+    <label class="presentationToggle"><input checked id="presentationMode" type="checkbox"/> <span>Presentation mode</span></label>
+    <button class="primary tourStartButton" id="loadDemoCustomer" type="button">Start guided tour</button>
+    <button class="secondary tourExploreButton" id="homeNewSurvey" type="button">Explore the full workflow</button>
+  </div>
 </div>
 
-<div class="quickActions simpleHomeActions">
-<button class="primary" id="loadDemoCustomer" type="button">Load demo customer</button>
-<button class="secondary" id="homeSaveCurrent" type="button">Save survey</button>
+<div class="tourWorkspace">
+  <aside class="tourRail" aria-label="Guided tour stages">
+    <div class="tourRailHead"><span>Your guided tour</span><b id="tourProgressLabel">Step 1 of 6</b></div>
+    <button class="tourStage active" data-tour-tab="customer" type="button"><span>1</span><b>Customer priorities</b><small>Understand the home</small></button>
+    <button class="tourStage" data-tour-tab="usage" type="button"><span>2</span><b>Energy and usage</b><small>Confirm demand</small></button>
+    <button class="tourStage" data-tour-tab="site" type="button"><span>3</span><b>Site walkthrough</b><small>Capture key details</small></button>
+    <button class="tourStage" data-tour-tab="build" type="button"><span>4</span><b>Design and sizing</b><small>Right-size the system</small></button>
+    <button class="tourStage" data-tour-tab="present" type="button"><span>5</span><b>Proposal</b><small>Present the solution</small></button>
+    <button class="tourStage" data-tour-tab="agreement" type="button"><span>6</span><b>Acceptance</b><small>Agree and hand over</small></button>
+  </aside>
+
+  <section class="tourStagePreview" aria-live="polite">
+    <div class="tourPreviewHead">
+      <div><span>Live demo stage</span><b id="tourPreviewTitle">Customer priorities</b></div>
+      <span class="tourStepPill" id="tourStepPill">Step 1 of 6</span>
+    </div>
+    <div class="tourPreviewBody" id="tourPreviewBody">
+      <div class="tourPreviewCopy">
+        <span class="tourPreviewKicker">Start with what matters</span>
+        <h3>Understand the customer before designing the system.</h3>
+        <p>Capture goals, timing and concerns so the final recommendation feels considered rather than generic.</p>
+        <ul><li>Decision makers and priorities</li><li>Current concern and reason for acting</li><li>Clear expectations for the next step</li></ul>
+      </div>
+      <div class="tourSamplePanel">
+        <span>Illustrative demo profile</span>
+        <b>Sample household</b>
+        <dl><div><dt>Primary goal</dt><dd>Lower bills and greater independence</dd></div><div><dt>Typical usage</dt><dd>15.2 kWh per day</dd></div><div><dt>Next decision</dt><dd>Solar, battery and EV readiness</dd></div></dl>
+      </div>
+    </div>
+    <div class="tourPreviewFooter"><span>Real survey data comes to life as the tour moves through each stage.</span><button class="primary smallBtn" id="tourOpenStage" type="button">Open this stage</button></div>
+  </section>
+
+  <aside class="tourProof">
+    <span>What this proves</span>
+    <div><b>Complete visibility</b><p>Every detail captured in one connected workflow.</p></div>
+    <div><b>Professional standard</b><p>Consistent, customer-ready outputs at every visit.</p></div>
+    <div><b>Better outcomes</b><p>Right-size the system and explain it with confidence.</p></div>
+    <div><b>Handover ready</b><p>Clean information for CRM, design and installation teams.</p></div>
+  </aside>
 </div>
-<div class="syncNotice">
-<b>Local saved surveys</b>
-<p>Saved surveys are stored on this device for fast offline use. Export backups regularly from Tools.</p>
+
+<div class="tourOutputs">
+  <div class="tourOutputsHead"><span>What you will produce</span><b>One visit, four useful outputs.</b></div>
+  <button data-output-tab="present" type="button"><b>Customer proposal</b><small>A clear recommendation that explains value.</small></button>
+  <button data-output-tab="site" type="button"><b>Site evidence</b><small>Photos, measurements and route notes.</small></button>
+  <button data-output-tab="internal" type="button"><b>CRM handover</b><small>Structured notes and next actions.</small></button>
+  <button data-output-tab="agreement" type="button"><b>Survey pack</b><small>A complete local export for the team.</small></button>
 </div>
-<div class="syncNotice" id="homeProcessNote"><b>Today’s journey</b><p>Understand what matters, confirm usage, walk the home, build the recommendation, present the reason, then accept the survey guidance.</p></div>
-<div class="readinessBox homeReadinessCard" id="homeReadinessCard">Readiness score will appear once a survey is started.</div>
-<div class="savedList" id="homeSavedList"></div>
+
+<div class="tourTrustBar">
+  <span><b>Local-first</b> Works offline on site.</span>
+  <span><b>Survey-led</b> Built around the conversation.</span>
+  <span><b>Shared view</b> One screen, one clear story.</span>
+  <span><b>Handover ready</b> From proposal to install.</span>
+</div>
+
+<details class="homeOperations">
+  <summary>Explore operational tools</summary>
+  <div class="homeCsvStarter" id="homeCsvStarter">
+    <div class="miniStepHead"><span>Optional import</span><b>Start from monday CSV</b></div>
+    <p>Paste a customer row or Field,Value export before the visit.</p>
+    <details class="quickDetails compactCsvImport">
+      <summary>Paste or upload monday CSV</summary>
+      <label>monday CSV text<textarea id="homeCsvPaste" placeholder="Paste Field,Value CSV or a normal monday CSV row here"></textarea></label>
+      <div class="two">
+        <button class="primary" id="homeImportCustomer" type="button">Import CSV and open Priorities</button>
+        <button class="secondary" id="homeSkipCsv" type="button">Start blank survey</button>
+      </div>
+      <label class="fileImportLine">Upload monday CSV<input accept=".csv,text/csv" id="homeCsvFile" type="file"/></label>
+      <div class="guide" id="homeCsvStatus">No CSV imported yet.</div>
+    </details>
+  </div>
+  <div class="quickActions simpleHomeActions"><button class="secondary" id="homeSaveCurrent" type="button">Save current survey</button></div>
+  <div class="syncNotice"><b>Local saved surveys</b><p>Saved surveys stay on this device for fast offline use.</p></div>
+  <div class="syncNotice" id="homeProcessNote"><b>Full workflow</b><p>Understand, survey, design, present, accept and hand over.</p></div>
+  <div class="readinessBox homeReadinessCard" id="homeReadinessCard">Readiness score will appear once a survey is started.</div>
+  <div class="savedList" id="homeSavedList"></div>
+</details>
 </section>
 <section class="panel" id="customer">
 <div class="sectionTop">
@@ -254,14 +305,14 @@
 </select></label>
 <div class="two">
 <label>Panel count<input id="panelCount" inputmode="numeric" type="number" value="0"/><span class="fieldHint">Surveyor-adjustable. Roof auto-fit gives a suggestion, but this can be overridden for obstructions or judgement on site.</span></label>
-<label>System override price £<input id="systemOverride" inputmode="decimal" type="number" value="0"/></label>
+<label class="demoCommercialField">Illustrative proposal override £<input id="systemOverride" inputmode="decimal" type="number" value="0"/></label>
 </div>
 <div class="panelSuggestionBox" id="panelSuggestionBox">
   <b>Roof suggestion</b>
   <span>Run auto-fit from the Survey page to show suggested panel count here.</span>
   <button class="secondary smallBtn" id="useRoofSuggestion" type="button">Use roof suggestion</button>
 </div>
-<p class="hint">Pricing follows Residential Pricing V8.6 cost build. Use system override only for an approved final proposal position.</p>
+<p class="hint demoPricingNote">Demo totals are illustrative only. Connect an approved commercial model in a private deployment.</p>
 <div class="panelSenseCard">
 <div class="panelSenseHead">
 <b>Panel-first roof sense check</b>
@@ -585,7 +636,7 @@
 <details class="internalGroup toolBox appTool">
 <summary>App tools</summary>
 <button class="secondary" id="updateApp" type="button">Update app / clear cache</button>
-<div class="versionBadge" id="appVersionBadge">App version: Demo v2</div>
+<div class="versionBadge" id="appVersionBadge">App version: Demo v3</div>
 </details>
 </section>
 </main>

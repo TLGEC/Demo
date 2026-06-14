@@ -1,6 +1,14 @@
-# Solar Survey Pro Demo v2
+# Solar Survey Pro Demo v3
 
-Neutral demo version for screen recording, partner demos and controlled customer/process demonstrations.
+Buyer-facing guided demo for screen recording, partner demos and controlled customer/process demonstrations.
+
+## Demo v3 changes
+
+- Leads with a guided six-stage product tour and clear business outcomes.
+- Keeps CSV import, saved surveys and readiness tools behind an operational-details section.
+- Adds presentation mode and direct links to the proposal, evidence, handover and survey-pack outputs.
+- Uses illustrative public-demo pricing rather than private commercial logic.
+- Keeps the complete survey, recommendation and export workflow available for deeper demonstrations.
 
 ## Upload to GitHub Pages
 

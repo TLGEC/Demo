@@ -33,27 +33,28 @@ function migrateOldStorageKeys(){
 
 function today(){return new Date().toISOString().slice(0,10)}
 
+// Public demo values are illustrative only and are not an installer price book.
 const PRICE_GUIDE = {
-  markup: 0.3793,
-  salesCommission: 0.03,
-  marketing: 0.02,
+  markup: 0.25,
+  salesCommission: 0,
+  marketing: 0,
   panelCosts: {
-    "AIKO 540W": 84,
-    "AIKO 495W": 84,
-    "SunPower P7 500W": 84,
-    "SunPower P7 450W": 82.5
+    "AIKO 540W": 120,
+    "AIKO 495W": 110,
+    "SunPower P7 500W": 125,
+    "SunPower P7 450W": 115
   },
-  framingCosts: {"Pantile":30,"Plain Tile":73,"Trapezoidal":22.5,"Slate":57,"Standing Seam":31,"Flat Roof":80,"In-Roof":135,"Fibre Cement":50,"Quattro":97.5,"Ground Screws":97.5},
-  optimiserCosts: {"Tigo":30},
-  scaffoldFirstLift: 500,
-  scaffoldExtraFactor: 0.85,
-  spdSingle: 75,
-  spdThree: 200,
-  birdPerPanel: 17.5,
-  evCharger: 900,
-  otherCosts: 105,
-  carriage: 55,
-  labour: {pvInstaller:150, electrician:180, pvLabourer:130, pm:200, designer:200, admin:150}
+  framingCosts: {"Pantile":45,"Plain Tile":45,"Trapezoidal":45,"Slate":60,"Standing Seam":50,"Flat Roof":70,"In-Roof":80,"Fibre Cement":55,"Quattro":65,"Ground Screws":75},
+  optimiserCosts: {"Tigo":40},
+  scaffoldFirstLift: 600,
+  scaffoldExtraFactor: 0.75,
+  spdSingle: 100,
+  spdThree: 250,
+  birdPerPanel: 20,
+  evCharger: 1000,
+  otherCosts: 250,
+  carriage: 100,
+  labour: {pvInstaller:200, electrician:250, pvLabourer:175, pm:250, designer:250, admin:175}
 };
 const framingDayBands = {
   "Pantile":[0,0.5,0.5,0.5,0.5,0.5,1,1,1,1,1,1.5,1.5,1.5,1.5,1.5,2,2,2,2,2,2.5,2.5,2.5,2.5,2.5,3,3,3,3,3,3.5,3.5,3.5,3.5,3.5],
@@ -315,7 +316,7 @@ function quote(){
   let tigoQty = hasSolar && $('tigo')?.checked ? Math.max(0, Math.min(panelCount, num($('tigoQty')?.value || 0))) : 0;
   let optimisers = tigoQty*(num($('tigoPrice')?.value)||30);
   let framing = hasSolar ? panelCount*(PRICE_GUIDE.framingCosts[frame]||73) : 0;
-  let inverter = hasBattery ? (batteryObj.inverterCost||0) : 0; // Sigenergy controller/PV inverter cost follows Residential Pricing V8.6.
+  let inverter = hasBattery ? (batteryObj.inverterCost||0) : 0;
   let battery = hasBattery ? batteryObj.cost : 0;
   let keyMaterials = panels+optimisers+framing+inverter+battery;
 
@@ -356,7 +357,7 @@ function quote(){
 
   return {panels,optimisers,tigoQty,framing,inverter,battery,batteryText:batteryObj.text,controllerText:batteryObj.controllerText,scaff:access,ev,eddi,otherExtra,extras,extrasText,discount,total,totalCost,calculatedTotal,override,spds,bird,keyMaterials,labour,logistics,access,other,sundries,optional,kWp:kWp(),panel:panelParts(),sigNominal:sigStorage().toFixed(2),sigUsable:sigUsable().toFixed(2),framingSelection:frame};
 }
-function calculate(){let q=quote();let overrideText=q.override>0?'Approved override used. Included items are listed without cost breakdown.':'Calculated from Residential Pricing V8.6 logic.';if($('quoteTotal'))$('quoteTotal').innerHTML=`<b>Total: ${money(q.total)}</b><br>${overrideText}<br>${$('panelCount').value||0} x ${q.panel.name}, ${q.kWp} kWp<br>Battery: ${q.batteryText}<br>${q.controllerText?('Controller: '+q.controllerText+'<br>'):''}Bird protection: ${$('bird').checked&&$('solar').checked?'Included':'Not included'} | Tigo: ${q.tigoQty||0} optimiser(s) | SPDs: ${$('spds').checked?'Included':'Not included'} | Scaffold: ${$('scaffoldLifts').value||0} lift(s) included<br>Extras: ${q.extrasText||'No manual extras selected'}`;try{renderPanelSenseCheck()}catch(e){}refreshPresent();save()}
+function calculate(){let q=quote();let overrideText=q.override>0?'Illustrative override used.':'Illustrative public-demo total. Connect an approved private pricing model for production.';if($('quoteTotal'))$('quoteTotal').innerHTML=`<b>Illustrative total: ${money(q.total)}</b><br>${overrideText}<br>${$('panelCount').value||0} x ${q.panel.name}, ${q.kWp} kWp<br>Battery: ${q.batteryText}<br>${q.controllerText?('Controller: '+q.controllerText+'<br>'):''}Bird protection: ${$('bird').checked&&$('solar').checked?'Included':'Not included'} | Tigo: ${q.tigoQty||0} optimiser(s) | SPDs: ${$('spds').checked?'Included':'Not included'} | Scaffold: ${$('scaffoldLifts').value||0} lift(s) included<br>Extras: ${q.extrasText||'No manual extras selected'}`;try{renderPanelSenseCheck()}catch(e){}refreshPresent();save()}
 
 
 
@@ -631,7 +632,7 @@ Battery guide: ${d.batteryGuide}
 Quote builder:
 Panel: ${q.panel.name}
 Panel count: ${d.panelCount}
-Pricing engine: Residential Pricing V8.6 internal cost build
+Pricing engine: illustrative public-demo model
 System override: ${d.systemOverride||0}
 Framing: ${d.framingSelection}
 Calculated proposal before override: ${money(q.calculatedTotal)}
@@ -5879,7 +5880,7 @@ const SIGENERGY_EMAIL_IMG = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/
 
 /* Demo v2: robust CSV import, safer demo loader and desktop polish hooks */
 (function(){
-  const DEMO_VERSION = 'Demo v2';
+  const DEMO_VERSION = 'Demo v3';
   const $ = id => document.getElementById(id);
 
   function setVersionV2(){
@@ -6174,11 +6175,9 @@ const SIGENERGY_EMAIL_IMG = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/
   function loadDemoCustomerV2(){
     resetDraftWithoutLeaving();
     setTimeout(()=>{
-      setVal('customerName','Alex Harper');
+      setVal('customerName','Sample household');
       setVal('surveyDate', new Date().toISOString().slice(0,10));
-      setVal('address','14 Oakfield Road, Demo Town, DT1 2AB');
-      setVal('phone','07123 456789');
-      setVal('email','alex.harper@example.com');
+      setVal('address','Illustrative property, Demo Town');
       setVal('wants','Lower bills, battery tariff use and a clear next step after survey.');
       setVal('whyNow','Electricity use has increased and the household wants a confident plan before adding an EV.');
       setVal('decisionMakers','Alex and partner');
@@ -6229,8 +6228,8 @@ const SIGENERGY_EMAIL_IMG = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/
     bindCsvImportV2();
     bindDemoLoaderV2();
     document.body.classList.add('demoV2');
-    const homeH2=document.querySelector('#home .landingHero h2');
-    if(homeH2) homeH2.textContent='Premium solar sales demo';
+    const homeH2=document.querySelector('#home .tourHero h2');
+    if(homeH2) homeH2.textContent='From survey to signed recommendation in one guided visit.';
   }
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', bindV2);
@@ -6241,4 +6240,164 @@ const SIGENERGY_EMAIL_IMG = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/
 
   // Expose for manual testing in console if needed.
   window.sspImportCsvTextV2 = importCsvTextV2;
+})();
+
+/* Demo v3: guided buyer tour and presentation mode */
+(function(){
+  const $ = id => document.getElementById(id);
+  const stages = [
+    {
+      tab:'customer', title:'Customer priorities', kicker:'Start with what matters',
+      heading:'Understand the customer before designing the system.',
+      copy:'Capture goals, timing and concerns so the final recommendation feels considered rather than generic.',
+      bullets:['Decision makers and priorities','Current concern and reason for acting','Clear expectations for the next step'],
+      facts:[['Primary goal','Lower bills and greater independence'],['Typical usage','15.2 kWh per day'],['Next decision','Solar, battery and EV readiness']]
+    },
+    {
+      tab:'usage', title:'Energy and usage', kicker:'Confirm real demand',
+      heading:'Turn bills and tariffs into a useful energy profile.',
+      copy:'Annual usage, timing and tariff data guide storage and help explain why the system has been sized this way.',
+      bullets:['Annual and daily energy use','Peak and off-peak tariff context','EV, heat-pump and evening-load flags'],
+      facts:[['Annual usage','5,550 kWh'],['Tariff pattern','Day and off-peak'],['Design signal','High evening use']]
+    },
+    {
+      tab:'site', title:'Site walkthrough', kicker:'Capture the practical route',
+      heading:'Keep every photo, measurement and install note together.',
+      copy:'The survey records the roof, electrical setup, equipment location, cable route and access before proposal handover.',
+      bullets:['Categorised evidence gallery','Roof dimensions and panel fit','Electrical, route and access notes'],
+      facts:[['Roof evidence','Captured'],['Cable route','Discussed'],['Access check','Ready for design']]
+    },
+    {
+      tab:'build', title:'Design and sizing', kicker:'Right-size with confidence',
+      heading:'Connect the customer need, roof fit and system choice.',
+      copy:'Panel count, storage and extras are checked in one place, with an illustrative total for the public demonstration.',
+      bullets:['Roof-led panel suggestion','Battery configuration guide','Clear inclusions and assumptions'],
+      facts:[['Solar array','5.94 kWp'],['Storage route','Modular battery'],['Commercial view','Illustrative only']]
+    },
+    {
+      tab:'present', title:'Customer proposal', kicker:'Explain the recommendation',
+      heading:'Present one clear story instead of a technical data dump.',
+      copy:'The customer sees what was understood, what was checked, why the system fits and what happens next.',
+      bullets:['Customer priorities reflected back','System and value explained clearly','Professional recommendation view'],
+      facts:[['Recommendation','Customer-ready'],['Design confidence','Visible'],['Next step','Easy to understand']]
+    },
+    {
+      tab:'agreement', title:'Acceptance and handover', kicker:'Move forward cleanly',
+      heading:'Capture the next step and produce the complete survey pack.',
+      copy:'Acceptance, signature, recommendation, evidence and handover notes can leave the visit as one organised package.',
+      bullets:['Simple next-step choice','Survey acceptance and signature','Proposal, CRM notes and export pack'],
+      facts:[['Acceptance','Recorded'],['Handover','Structured'],['Survey pack','Ready to export']]
+    }
+  ];
+  let currentStage = 0;
+
+  function activateTab(tabId){
+    document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.tab===tabId));
+    document.querySelectorAll('main > section.panel').forEach(p=>p.classList.toggle('on',p.id===tabId));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function prepareSample(){
+    const values={
+      customerName:'Sample household',
+      surveyDate:new Date().toISOString().slice(0,10),
+      address:'Illustrative property, Demo Town',
+      wants:'Lower bills, battery tariff use and a clear next step after survey.',
+      whyNow:'Energy use has increased and the household wants a confident plan before adding an EV.',
+      decisionMakers:'Household decision makers',
+      competitors:'One online comparison',
+      annualKwh:'5550',
+      dailyKwh:'15.2',
+      tariff:'Illustrative day and off-peak tariff',
+      peak:'28',
+      offpeak:'7',
+      annualSpend:'1550',
+      exportRate:'15',
+      solarSelfUsePct:'75',
+      panelModel:'AIKO 495W|495|1762 x 1134 x 30 mm|20.6 kg',
+      panelCount:'12',
+      framingSelection:'Plain Tile',
+      batteryBrand:'Sigenergy',
+      sig10Qty:'1',
+      sig6Qty:'1',
+      sigInstallType:'solarBattery',
+      sigControllerMode:'auto',
+      scaffoldLifts:'2',
+      zappiPrice:'1000',
+      eddiPrice:'600',
+      roof:'Main roof with good solar access. Plain tile assumed for the demonstration.',
+      dims:'Dimensions captured on site. Final layout remains subject to design checks.',
+      shade:'Minor morning shade noted for the demonstration.',
+      batteryLoc:'Garage wall near the consumer unit.',
+      meter:'Meter and consumer unit accessible in the garage.',
+      cable:'Preferred route through the garage and loft void.',
+      access:'Front scaffold access assumed with parking available.'
+    };
+    const checked=['solar','battery','ev','eddi','bird','spds','sigGateway'];
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    Object.entries(values).forEach(([id,value])=>{const el=$(id);if(el)el.value=value;});
+    if(Array.isArray(checks)) checks.forEach(id=>{const el=$(id);if(el)el.checked=checked.includes(id);});
+    try{ if(typeof setRoofPlanes==='function') setRoofPlanes([{name:'Main roof',width:'8.2',slope:'4.2',pitch:'35',azimuth:'10',panels:'12'}]); }catch(e){}
+    try{ if(typeof syncTeslaOptions==='function') syncTeslaOptions(); }catch(e){}
+    try{ if(typeof calculate==='function') calculate(); }catch(e){}
+    try{ if(typeof refreshPresent==='function') refreshPresent(); }catch(e){}
+    try{ if(typeof save==='function') save(); }catch(e){}
+  }
+
+  function renderTour(index){
+    currentStage=Math.max(0,Math.min(stages.length-1,index));
+    const stage=stages[currentStage];
+    document.querySelectorAll('.tourStage').forEach((button,i)=>button.classList.toggle('active',i===currentStage));
+    if($('tourProgressLabel')) $('tourProgressLabel').textContent=`Step ${currentStage+1} of ${stages.length}`;
+    if($('tourStepPill')) $('tourStepPill').textContent=`Step ${currentStage+1} of ${stages.length}`;
+    if($('tourPreviewTitle')) $('tourPreviewTitle').textContent=stage.title;
+    if($('tourPreviewBody')) $('tourPreviewBody').innerHTML=`
+      <div class="tourPreviewCopy">
+        <span class="tourPreviewKicker">${stage.kicker}</span>
+        <h3>${stage.heading}</h3>
+        <p>${stage.copy}</p>
+        <ul>${stage.bullets.map(item=>`<li>${item}</li>`).join('')}</ul>
+      </div>
+      <div class="tourSamplePanel">
+        <span>Illustrative demo profile</span>
+        <b>Sample household</b>
+        <dl>${stage.facts.map(([label,value])=>`<div><dt>${label}</dt><dd>${value}</dd></div>`).join('')}</dl>
+      </div>`;
+  }
+
+  function bindTour(){
+    document.body.classList.add('demoV3');
+    const presentation=$('presentationMode');
+    if(presentation){
+      const sync=()=>document.body.classList.toggle('presentationActive',presentation.checked);
+      presentation.onchange=sync;
+      sync();
+    }
+
+    document.querySelectorAll('.tourStage').forEach((button,index)=>{
+      button.onclick=()=>renderTour(index);
+    });
+
+    const open=$('tourOpenStage');
+    if(open) open.onclick=()=>activateTab(stages[currentStage].tab);
+
+    document.querySelectorAll('[data-output-tab]').forEach(button=>{
+      button.onclick=()=>activateTab(button.dataset.outputTab);
+    });
+
+    const start=$('loadDemoCustomer');
+    if(start){
+      start.onclick=event=>{
+        event.preventDefault();
+        prepareSample();
+        renderTour(0);
+        activateTab('home');
+      };
+    }
+    renderTour(0);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindTour);
+  else bindTour();
+  setTimeout(bindTour,1400);
 })();
