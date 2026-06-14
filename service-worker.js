@@ -1,8 +1,12 @@
-const CACHE='solar-survey-pro-demo-v3-1';
+const CACHE='solar-survey-pro-demo-v3-2';
 const FILES=['./','./index.html','./styles.css','./app.js','./manifest.json','./icon.svg','./app-icon-192.png','./app-icon-512.png','./tesla-powerwall.webp','./sigenergy-battery.webp','./solar-survey-pro-logo.png'];
 
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES).catch(()=>null)));
+  event.waitUntil(caches.open(CACHE).then(cache => Promise.all(FILES.map(file =>
+    fetch(file, {cache:'reload'})
+      .then(response => response.ok ? cache.put(file, response) : null)
+      .catch(()=>null)
+  ))));
   self.skipWaiting();
 });
 

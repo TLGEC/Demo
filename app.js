@@ -6235,15 +6235,13 @@ const SIGENERGY_EMAIL_IMG = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', bindV2);
   else bindV2();
 
-  // Rebind once more after legacy patches.
-  setTimeout(bindV2, 1200);
-
   // Expose for manual testing in console if needed.
   window.sspImportCsvTextV2 = importCsvTextV2;
 })();
 
-/* Demo v3: guided buyer tour and presentation mode */
+/* Demo v3.1: stable guided buyer tour and presentation mode */
 (function(){
+  const DEMO_VERSION = 'Demo v3.1';
   const $ = id => document.getElementById(id);
   const stages = [
     {
@@ -6290,14 +6288,27 @@ const SIGENERGY_EMAIL_IMG = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/
     }
   ];
   let currentStage = 0;
+  let samplePrepared = false;
+  let tourBound = false;
 
   function activateTab(tabId){
     document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.tab===tabId));
     document.querySelectorAll('main > section.panel').forEach(p=>p.classList.toggle('on',p.id===tabId));
-    window.scrollTo({top:0,behavior:'smooth'});
+    try{
+      const suffix=tabId==='home' ? '' : `#${tabId}`;
+      history.replaceState(null,'',location.pathname+location.search+suffix);
+    }catch(e){}
+    window.scrollTo(0,0);
   }
 
-  function prepareSample(){
+  function prepareSample(includeOutputs=false){
+    if(samplePrepared){
+      if(includeOutputs){
+        try{ if(typeof calculate==='function') calculate(); }catch(e){}
+        try{ if(typeof refreshPresent==='function') refreshPresent(); }catch(e){}
+      }
+      return;
+    }
     const values={
       customerName:'Sample household',
       surveyDate:new Date().toISOString().slice(0,10),
@@ -6334,20 +6345,26 @@ const SIGENERGY_EMAIL_IMG = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/
       access:'Front scaffold access assumed with parking available.'
     };
     const checked=['solar','battery','ev','eddi','bird','spds','sigGateway'];
-    try{ localStorage.removeItem(KEY); }catch(e){}
     Object.entries(values).forEach(([id,value])=>{const el=$(id);if(el)el.value=value;});
     if(Array.isArray(checks)) checks.forEach(id=>{const el=$(id);if(el)el.checked=checked.includes(id);});
     try{ if(typeof setRoofPlanes==='function') setRoofPlanes([{name:'Main roof',width:'8.2',slope:'4.2',pitch:'35',azimuth:'10',panels:'12'}]); }catch(e){}
     try{ if(typeof syncTeslaOptions==='function') syncTeslaOptions(); }catch(e){}
-    try{ if(typeof calculate==='function') calculate(); }catch(e){}
-    try{ if(typeof refreshPresent==='function') refreshPresent(); }catch(e){}
-    try{ if(typeof save==='function') save(); }catch(e){}
+    samplePrepared=true;
+    if(includeOutputs){
+      try{ if(typeof calculate==='function') calculate(); }catch(e){}
+      try{ if(typeof refreshPresent==='function') refreshPresent(); }catch(e){}
+    }
   }
 
   function renderTour(index){
     currentStage=Math.max(0,Math.min(stages.length-1,index));
     const stage=stages[currentStage];
-    document.querySelectorAll('.tourStage').forEach((button,i)=>button.classList.toggle('active',i===currentStage));
+    document.querySelectorAll('.tourStage').forEach((button,i)=>{
+      const active=i===currentStage;
+      button.classList.toggle('active',active);
+      if(active) button.setAttribute('aria-current','step');
+      else button.removeAttribute('aria-current');
+    });
     if($('tourProgressLabel')) $('tourProgressLabel').textContent=`Step ${currentStage+1} of ${stages.length}`;
     if($('tourStepPill')) $('tourStepPill').textContent=`Step ${currentStage+1} of ${stages.length}`;
     if($('tourPreviewTitle')) $('tourPreviewTitle').textContent=stage.title;
@@ -6365,13 +6382,37 @@ const SIGENERGY_EMAIL_IMG = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/
       </div>`;
   }
 
+  function setPresentationMode(enabled){
+    const presentation=$('presentationMode');
+    document.body.classList.toggle('presentationActive',enabled);
+    if(!presentation) return;
+    presentation.setAttribute('aria-pressed',String(enabled));
+    const status=presentation.querySelector('strong');
+    if(status) status.textContent=enabled?'On':'Off';
+  }
+
+  function resetOpeningPosition(){
+    if(!document.querySelector('#home.panel.on')) return;
+    try{ history.scrollRestoration='manual'; }catch(e){}
+    window.scrollTo(0,0);
+    requestAnimationFrame(()=>window.scrollTo(0,0));
+  }
+
   function bindTour(){
+    if(tourBound) return;
+    tourBound=true;
     document.body.classList.add('demoV3');
+    if($('homeVersionSmall')) $('homeVersionSmall').textContent=DEMO_VERSION;
+    if($('appVersionBadge')) $('appVersionBadge').textContent='App version: '+DEMO_VERSION;
+
     const presentation=$('presentationMode');
     if(presentation){
-      const sync=()=>document.body.classList.toggle('presentationActive',presentation.checked);
-      presentation.onchange=sync;
-      sync();
+      setPresentationMode(true);
+      presentation.onclick=event=>{
+        event.preventDefault();
+        event.stopPropagation();
+        setPresentationMode(presentation.getAttribute('aria-pressed')!=='true');
+      };
     }
 
     document.querySelectorAll('.tourStage').forEach((button,index)=>{
@@ -6379,25 +6420,48 @@ const SIGENERGY_EMAIL_IMG = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/
     });
 
     const open=$('tourOpenStage');
-    if(open) open.onclick=()=>activateTab(stages[currentStage].tab);
+    if(open) open.onclick=()=>{
+      const includeOutputs=currentStage>=3;
+      open.disabled=true;
+      open.textContent='Preparing stage...';
+      requestAnimationFrame(()=>{
+        prepareSample(includeOutputs);
+        activateTab(stages[currentStage].tab);
+        open.disabled=false;
+        open.textContent='Open this stage';
+      });
+    };
 
     document.querySelectorAll('[data-output-tab]').forEach(button=>{
-      button.onclick=()=>activateTab(button.dataset.outputTab);
+      button.onclick=()=>{
+        const includeOutputs=['present','agreement'].includes(button.dataset.outputTab);
+        prepareSample(includeOutputs);
+        activateTab(button.dataset.outputTab);
+      };
     });
 
     const start=$('loadDemoCustomer');
     if(start){
       start.onclick=event=>{
         event.preventDefault();
-        prepareSample();
         renderTour(0);
-        activateTab('home');
+        const workspace=document.querySelector('.tourWorkspace');
+        if(workspace) workspace.scrollIntoView({block:'start'});
       };
     }
+
+    const explore=$('homeNewSurvey');
+    if(explore) explore.onclick=event=>{
+      event.preventDefault();
+      prepareSample(false);
+      activateTab('customer');
+    };
+
     renderTour(0);
+    resetOpeningPosition();
+    setTimeout(resetOpeningPosition,80);
   }
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindTour);
   else bindTour();
-  setTimeout(bindTour,1400);
 })();

@@ -1,6 +1,14 @@
-# Solar Survey Pro Demo v3
+# Solar Survey Pro Demo v3.1
 
 Buyer-facing guided demo for screen recording, partner demos and controlled customer/process demonstrations.
+
+## Demo v3.1 changes
+
+- Replaced the presentation checkbox with an isolated, lightweight mode button.
+- Removed full-survey save and calculation work from guided-tour startup.
+- Prevented delayed event rebinding from overriding the stable tour controls.
+- Improved responsive headline wrapping and reset the opening scroll position.
+- Rotated the offline cache so existing browsers receive the stability update.
 
 ## Demo v3 changes
 
