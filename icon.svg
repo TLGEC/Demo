@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<rect x="28" y="28" width="456" height="456" rx="110" fill="#fff" stroke="#d9e6de" stroke-width="10"/>
+<circle cx="380" cy="135" r="62" fill="#eed800"/>
+<polygon points="100,215 370,235 325,350 80,330" fill="#062819"/>
+<g stroke="#79ac20" stroke-width="10">
+<line x1="165" y1="220" x2="130" y2="338"/>
+<line x1="230" y1="225" x2="195" y2="343"/>
+<line x1="295" y1="230" x2="260" y2="348"/>
+<line x1="92" y1="260" x2="355" y2="280"/>
+<line x1="85" y1="300" x2="338" y2="320"/>
+</g>
+<text x="256" y="430" font-family="Arial, sans-serif" font-size="82" font-weight="900" text-anchor="middle" fill="#062819">SSP</text>
+</svg>
